@@ -1,1 +1,716 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050706">
+<title>ТУМАН // NIGHT BABKA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Roboto+Mono:wght@300;400&display=swap');
+
+:root {
+  --green: #a5b6a3;
+  --dim: #657365;
+  --bg: #050706;
+  --size: 17px;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--green);
+  background: var(--bg);
+  font-family: 'Roboto Mono', monospace;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: .13;
+  background: repeating-linear-gradient(
+    0deg, transparent 0px, transparent 3px,
+    rgba(180,220,180,.08) 4px
+  );
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  pointer-events: none;
+  z-index: 9;
+  opacity: .12;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  animation: noise .2s steps(2) infinite;
+}
+@keyframes noise {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(2%,-1%); }
+  50% { transform: translate(-1%,2%); }
+  75% { transform: translate(1%,1%); }
+}
+#fog {
+  position: fixed;
+  inset: -30%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 40%, #26372b66, transparent 40%),
+    radial-gradient(ellipse at 80% 60%, #29342a44, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, #17251d66, transparent 60%);
+  filter: blur(55px);
+  animation: fog 22s ease-in-out infinite alternate;
+}
+@keyframes fog {
+  from { transform: translate(-4%,2%) scale(1); }
+  to { transform: translate(5%,-3%) scale(1.2); }
+}
+#glitch {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  background: transparent;
+}
+#glitch.active {
+  animation: glitch .32s steps(2) both;
+}
+@keyframes glitch {
+  0% {
+    opacity: .8;
+    background: linear-gradient(transparent 20%,#d8e8d955 21%,transparent 23%);
+    transform: translateX(-4px);
+  }
+  20% {
+    background: linear-gradient(90deg,#aaffaa22 0 35%,transparent 35% 70%,#ff444422 70%);
+    transform: translateX(5px);
+  }
+  40% {
+    opacity: .4;
+    transform: translateX(-2px);
+  }
+  60% {
+    background: #c3d6c311;
+    transform: translateX(3px);
+  }
+  100% { opacity: 0; transform: none; }
+}
+header, main, footer, .controls {
+  position: relative;
+  z-index: 2;
+}
+header {
+  max-width: 850px;
+  margin: auto;
+  padding: 23px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #29342b;
+}
+.brand {
+  color: #d0dbce;
+  font: 16px 'Share Tech Mono', monospace;
+  letter-spacing: 4px;
+}
+.brand span { color: #667666; }
+.status {
+  font-size: 10px;
+  color: #647564;
+  letter-spacing: 2px;
+}
+.status::before {
+  content: "● ";
+  color: #829b79;
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  50% { opacity: .2; }
+}
+.hero {
+  max-width: 850px;
+  margin: 30px auto 0;
+  padding: 0 16px;
+}
+.cover {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #29342b;
+  background:
+    linear-gradient(0deg,#050706 0%,transparent 60%),
+    radial-gradient(ellipse at 50% 60%,#293a2d 0%,#111914 38%,#050706 78%);
+}
+.cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(.48) saturate(.55) contrast(1.15);
+}
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg,#050706 0%,transparent 55%);
+  pointer-events: none;
+}
+.cover-text {
+  position: absolute;
+  bottom: 20px;
+  left: 22px;
+  z-index: 1;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #c1d0bd;
+}
+.heading {
+  text-align: center;
+  padding: 46px 18px 35px;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: #738371;
+}
+h1 {
+  margin: 15px 0;
+  font: clamp(56px,12vw,100px)/1 'Share Tech Mono', monospace;
+  letter-spacing: .12em;
+  color: #d7e0d2;
+  text-shadow: 0 0 20px #a9c9a522;
+  animation: titleFlicker 8s infinite;
+}
+@keyframes titleFlicker {
+  0%, 91%, 93%, 96%, 100% { opacity: 1; }
+  92% { opacity: .55; }
+  94% { opacity: .8; }
+  95% { opacity: .25; }
+}
+.subtitle {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #758275;
+  letter-spacing: 1px;
+}
+.divider {
+  height: 1px;
+  width: 48px;
+  background: #728570;
+  margin: 25px auto 0;
+}
+.controls {
+  max-width: 680px;
+  margin: 0 auto 34px;
+  padding: 14px;
+  border: 1px solid #263128;
+  background: #0a0e0bce;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+button {
+  color: #b4c2b1;
+  background: #0a100c;
+  border: 1px solid #39483a;
+  padding: 10px 12px;
+  font: 11px 'Roboto Mono', monospace;
+  cursor: pointer;
+  transition: .2s;
+}
+button:hover, button:focus-visible {
+  color: #f0fff0;
+  border-color: #8aa187;
+  box-shadow: 0 0 12px #7da77b22;
+}
+button[aria-pressed="true"] { border-color: #a4c09d; }
+#volume {
+  width: 100px;
+  accent-color: #8fa58a;
+}
+.control-note {
+  flex-basis: 100%;
+  text-align: center;
+  color: #637163;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.story {
+  position: relative;
+  max-width: 680px;
+  padding: 0 22px 55px;
+  margin: auto;
+  font-size: var(--size);
+  line-height: 1.95;
+  color: #c2cdc0;
+  overflow-wrap: anywhere;
+}
+.story p { margin: 0 0 1.35em; }
+.story .dialogue { margin-bottom: .7em; }
+.story .ending {
+  margin-top: 2em;
+  color: #e0e8db;
+  text-shadow: 0 0 12px #a7c6a322;
+}
+.story .signal {
+  font: 13px 'Share Tech Mono', monospace;
+  color: #748774;
+  letter-spacing: 2px;
+}
+.story .last {
+  margin-top: 2.5em;
+  font: 25px 'Share Tech Mono', monospace;
+  letter-spacing: 4px;
+  color: #d9e2d5;
+}
+footer {
+  border-top: 1px solid #29342b;
+  max-width: 680px;
+  margin: auto;
+  padding: 27px 22px 45px;
+  text-align: center;
+}
+.footer-brand {
+  font: 22px 'Share Tech Mono', monospace;
+  letter-spacing: 4px;
+}
+.footer-sub {
+  margin-top: 10px;
+  color: #6e7d6d;
+  font-size: 11px;
+}
+.tags {
+  margin-top: 24px;
+  color: #657564;
+  font-size: 10px;
+  line-height: 2;
+}
+body.flash { animation: screenFlash .22s steps(2); }
+@keyframes screenFlash {
+  0% { filter: brightness(2); }
+  45% { filter: brightness(.45) contrast(1.5); }
+  100% { filter: none; }
+}
+@media(max-width:600px) {
+  header { padding: 18px 15px; }
+  .brand { font-size: 13px; letter-spacing: 3px; }
+  .status { font-size: 9px; letter-spacing: 1px; }
+  .hero { margin-top: 18px; }
+  .heading { padding: 35px 15px 27px; }
+  .story { padding-left: 19px; padding-right: 19px; }
+  .controls { margin-left: 15px; margin-right: 15px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation-duration: .01ms !important; }
+}
+</style>
+</head>
+
+<body>
+<div id="fog"></div>
+<div id="glitch"></div>
+
+<header>
+  <div class="brand">NIGHT <span>BABKA</span></div>
+  <div class="status" id="status">SIGNAL ACTIVE</div>
+</header>
+
+<section class="hero">
+  <div class="cover">
+    <!-- Положи обложку в images/tuman-cover.jpg -->
+    <img src="images/tuman-cover.jpg"
+         alt="Туманная лесная хижина"
+         onerror="this.remove()">
+    <div class="cover-text">ARCHIVE FILE // NB-001</div>
+  </div>
+</section>
+
+<section class="heading">
+  <div class="eyebrow">NIGHT BABKA ORIGINAL</div>
+  <h1 id="title">ТУМАН</h1>
+  <div class="subtitle">НЕ КАЖДЫЙ ГОЛОС В ЛЕСУ ЗОВЁТ ТЕБЯ ДОМОЙ.</div>
+  <div class="divider"></div>
+</section>
+
+<nav class="controls">
+  <button id="smaller" type="button">A−</button>
+  <button id="larger" type="button">A+</button>
+  <button id="glitchBtn" type="button">▧ GLITCH</button>
+  <button id="soundBtn" type="button" aria-pressed="false">♫ ВКЛЮЧИТЬ ЗВУК</button>
+  <label style="font-size:10px;color:#788777" for="volume">VOLUME</label>
+  <input id="volume" type="range" min="0" max="100" value="25">
+  <div class="control-note">
+    РЕКОМЕНДУЕТСЯ ЧИТАТЬ В НАУШНИКАХ. ЗВУК МОЖНО ОТКЛЮЧИТЬ.
+  </div>
+</nav>
+
+<main class="story" id="story">
+
+<p>С дачи мы выехали уже вечером. Жена осталась ещё на пару дней, а мне утром нужно было на работу. После бани дети размякли и почти не разговаривали. Дочь сидела рядом со мной, подключив телефон к зарядке. Сын устроился сзади, рядом с собакой.</p>
+
+<p>Последние дома остались позади, дорога пошла через лес. Туман постепенно сомкнулся между деревьями. Свет фар упирался в белёсую стену, и дальше нескольких метров дорогу было не разглядеть.</p>
+
+<p class="dialogue">— Пап, останови, в туалет хочу, — сказал сын.</p>
+
+<p>Я свернул на обочину, оставив двигатель и фары включёнными.</p>
+
+<p class="dialogue">— Быстро только. И далеко не уходи.</p>
+
+<p>Сын выбрался через заднюю дверь. Собака выскочила следом. Я достал сигарету и опустил стекло на пару сантиметров. В салон потянуло сыростью.</p>
+
+<p class="dialogue">— Ты не выходи, замёрзнешь, — сказал я дочери.</p>
+
+<p>Она промолчала. В боковом стекле отражалось её лицо.</p>
+
+<p>Прошло несколько минут. Сын не возвращался. Я посигналил, но из леса донёсся только короткий лай.</p>
+
+<p class="dialogue">— Сейчас гляну, — сказал я и вышел.</p>
+
+<p>Фары освещали край дороги, но за ним туман скрывал деревья. Я позвал сына. Собака залаяла снова, уже дальше от дороги.</p>
+
+<p>Я пошёл на лай, пока ещё различал свет машины между стволами. Вскоре он исчез.</p>
+
+<p>Собака стояла у берёзы, напряжённо глядя в глубь леса. Сын был рядом.</p>
+
+<p class="dialogue">— Ты чего так далеко ушёл?</p>
+
+<p>Он не отреагировал на вопрос.</p>
+
+<p class="dialogue">— Меня тётенька позвала.</p>
+
+<p class="dialogue">— Какая тётенька?</p>
+
+<p class="dialogue">— Не знаю. Она меня по имени позвала. Там, за деревьями.</p>
+
+<p>Сын указал в темноту. Я взял его за руку и повёл обратно. Пальцы у него были холодными. Собака задержалась у берёзы и пошла следом, когда мы уже отошли.</p>
+
+<p>Вернувшись к машине, я посадил сына на заднее сиденье и пристегнул ремнём. Собака осталась снаружи. Я захлопнул дверь.</p>
+
+<p>И тут я заметил, что пассажирское сиденье пустое.</p>
+
+<p>Телефон дочери лежал на месте, подключённый к зарядке. Экран ещё светился. Пассажирская дверь была закрыта.</p>
+
+<p>Я заглянул в салон через стекло, затем обошёл машину. Дочери нигде не было.</p>
+
+<p class="dialogue">— Ты сестру видел? — спросил я сына, открыв заднюю дверь.</p>
+
+<p>Он покачал головой.</p>
+
+<p>Я закрыл дверь и позвал дочь по имени. Ответа не было. Затем из тумана донеслось:</p>
+
+<p class="dialogue">— Пап!</p>
+
+<p>Голос прозвучал совсем рядом. Я обернулся. Туман скрывал поворот.</p>
+
+<p class="dialogue">— Сиди здесь. Никому не открывай, — сказал я сыну.</p>
+
+<p>Он смотрел на меня через стекло.</p>
+
+<p>Я побежал на голос, крича дочери, чтобы она отозвалась. За поворотом никого не оказалось. Когда я остановился, из тумана снова донеслось:</p>
+
+<p class="dialogue">— Пап!</p>
+
+<p>Тот же надрыв. Та же интонация. Как запись, поставленная на повтор.</p>
+
+<p>Я вернулся к машине. Задняя дверь была закрыта.</p>
+
+<p>Сын исчез.</p>
+
+<p>Я открыл дверь. На пустом сиденье остался застёгнутый ремень. Его лямка была натянута дугой над обивкой, словно продолжала удерживать невидимое тело.</p>
+
+<p>Я потянул ремень на себя. Он подался, а затем втянулся обратно.</p>
+
+<p>Собака стояла у обочины, глядя в лес.</p>
+
+<p>Я достал телефон. Связи не было.</p>
+
+<p>Собака коротко гавкнула и направилась между деревьями.</p>
+
+<p>Я взял из бардачка ручной фонарь и пошёл за ней.</p>
+
+<p>Она держалась впереди, иногда пропадая за стволами. Вскоре я перестал понимать, далеко ли ушёл от дороги. Туман скрывал всё, кроме ближайших деревьев, и даже их очертания расплывались в свете фонаря. Под ногами хлюпала мокрая земля.</p>
+
+<p>Потом лес поредел.</p>
+
+<p>Между деревьями стояла небольшая хижина. Без окон и крыльца, с тёмными мокрыми досками. Вместо двери зиял чёрный проём.</p>
+
+<p>Собака подошла к нему и зарычала. Когда я приблизился, она встала поперёк входа.</p>
+
+<p class="dialogue">— Отойди.</p>
+
+<p>Она не шелохнулась.</p>
+
+<p>Луч фонаря высветил края проёма, но не доставал до пола и задней стены. Для такой маленькой хижины внутри было слишком много черноты.</p>
+
+<p class="dialogue">— Дети! — крикнул я.</p>
+
+<p>Голос пропал без эха. Не вернулось даже слабого отзвука.</p>
+
+<p>Я попытался шагнуть внутрь, но не смог перенести вес на другую ногу. Собака вцепилась зубами в ткань моих джинсов и потянула назад. Я отступил, и она отпустила штанину, не сводя глаз с проёма.</p>
+
+<p>Тогда из хижины донёсся гул.</p>
+
+<p>Сначала едва слышный, похожий на далёкий звук работающего двигателя. Но он не приближался и не удалялся. Просто нарастал, низкий и ровный, пока я не почувствовал его грудью. Каждый вдох давался труднее.</p>
+
+<p>Собака прижала уши и попятилась.</p>
+
+<p>Потом исчезло всё остальное: ветер, шорох веток. Только гул заполнял пространство перед хижиной.</p>
+
+<p>Затем он оборвался.</p>
+
+<p>Собака беззвучно открывала пасть. Я видел, как напрягается её горло.</p>
+
+<p>Тишина была такой плотной, что я не слышал собственного дыхания.</p>
+
+<p>Фонарь продолжал светить. Его луч лежал на досках по краям входа, однако внутри хижины света больше не было.</p>
+
+<p>Чернота скрыла дальние края проёма. Потом поглотила ближние.</p>
+
+<p>Собака рванула меня за штанину.</p>
+
+<p>Я попытался отступить. Ноги не двигались.</p>
+
+<p class="ending">Фонарь погас.</p>
+
+<p class="signal">[ SIGNAL LOST ]</p>
+
+<p class="last">КОНЕЦ СВЯЗИ.</p>
+
+</main>
+
+<footer>
+  <div class="footer-brand">NIGHT BABKA</div>
+  <div class="footer-sub">ИСТОРИИ, КОТОРЫЕ ЛУЧШЕ НЕ ЧИТАТЬ НОЧЬЮ.</div>
+  <div class="tags">#NightBabka &nbsp; #Туман &nbsp; #Хоррор &nbsp; #СтрашныеИстории</div>
+</footer>
+
+<script>
+const root = document.documentElement;
+const glitchLayer = document.getElementById('glitch');
+const soundBtn = document.getElementById('soundBtn');
+const volumeControl = document.getElementById('volume');
+const statusText = document.getElementById('status');
+
+let fontSize = 17;
+let audioCtx = null;
+let master = null;
+let droneGain = null;
+let noiseGain = null;
+let audioStarted = false;
+let glitchTimer = null;
+
+document.getElementById('smaller').addEventListener('click', () => {
+  fontSize = Math.max(13, fontSize - 1);
+  root.style.setProperty('--size', fontSize + 'px');
+});
+
+document.getElementById('larger').addEventListener('click', () => {
+  fontSize = Math.min(27, fontSize + 1);
+  root.style.setProperty('--size', fontSize + 'px');
+});
+
+function glitch() {
+  glitchLayer.classList.remove('active');
+  document.body.classList.remove('flash');
+
+  // Перезапуск CSS-анимации
+  void glitchLayer.offsetWidth;
+  glitchLayer.classList.add('active');
+
+  if (Math.random() > .6) {
+    document.body.classList.add('flash');
+  }
+
+  setTimeout(() => {
+    glitchLayer.classList.remove('active');
+    document.body.classList.remove('flash');
+  }, 400);
+}
+
+document.getElementById('glitchBtn').addEventListener('click', glitch);
+
+// Редкие автоматические помехи
+function scheduleGlitch() {
+  clearTimeout(glitchTimer);
+  glitchTimer = setTimeout(() => {
+    if (Math.random() > .35) glitch();
+    scheduleGlitch();
+  }, 9000 + Math.random() * 17000);
+}
+scheduleGlitch();
+
+function makeNoise(ctx) {
+  const length = ctx.sampleRate * 3;
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  for (let i = 0; i < length; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+  return source;
+}
+
+function startSound() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContextClass) {
+    statusText.textContent = 'AUDIO UNAVAILABLE';
+    return;
+  }
+
+  audioCtx = new AudioContextClass();
+
+  master = audioCtx.createGain();
+  master.gain.value = Number(volumeControl.value) / 100 * 0.35;
+  master.connect(audioCtx.destination);
+
+  // Низкий гул, похожий на далёкий двигатель
+  const oscillator = audioCtx.createOscillator();
+  oscillator.type = 'sine';
+  oscillator.frequency.value =  fortyHz();
+
+  droneGain = audioCtx.createGain();
+  droneGain.gain.value = 0.32;
+  oscillator.connect(droneGain);
+  droneGain.connect(master);
+  oscillator.start();
+
+  // Медленная модуляция гула
+  const lfo = audioCtx.createOscillator();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.12;
+
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 7;
+  lfo.connect(lfoGain);
+  lfoGain.connect(oscillator.frequency);
+  lfo.start();
+
+  // Тихий воздушный шум
+  const noise = makeNoise(audioCtx);
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 330;
+
+  noiseGain = audioCtx.createGain();
+  noiseGain.gain.value = 0.045;
+
+  noise.connect(filter);
+  filter.connect(noiseGain);
+  noiseGain.connect(master);
+  noise.start();
+
+  audioStarted = true;
+  soundBtn.textContent = '♫ ВЫКЛЮЧИТЬ ЗВУК';
+  soundBtn.setAttribute('aria-pressed', 'true');
+  statusText.textContent = 'SIGNAL ACTIVE';
+
+  // Редкие короткие радиопомехи
+  scheduleAudioGlitches();
+}
+
+function fortyHz() {
+  return 42;
+}
+
+function scheduleAudioGlitches() {
+  if (!audioStarted || !audioCtx) return;
+
+  const delay = 7000 + Math.random() * 14000;
+
+  setTimeout(() => {
+    if (!audioStarted || !audioCtx) return;
+
+    const now = audioCtx.currentTime;
+    const burst = audioCtx.createBufferSource();
+    const buffer = audioCtx.createBuffer(
+      1, Math.floor(audioCtx.sampleRate * .18), audioCtx.sampleRate
+    );
+    const channel = buffer.getChannelData(0);
+
+    for (let i = 0; i < channel.length; i++) {
+      channel[i] = (Math.random() * 2 - 1) *
+        (1 - i / channel.length);
+    }
+
+    burst.buffer = buffer;
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1000 + Math.random() * 2200;
+    filter.Q.value = 0.7;
+
+    const gain = audioCtx.createGain();
+    const volume = Number(volumeControl.value) / 100;
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(
+      Math.max(0.001, volume * 0.12), now + 0.015
+    );
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+    burst.connect(filter);
+    filter.connect(gain);
+    gain.connect(master);
+    burst.start(now);
+    burst.stop(now + 0.19);
+
+    if (Math.random() > .5) glitch();
+    scheduleAudioGlitches();
+  }, delay);
+}
+
+soundBtn.addEventListener('click', async () => {
+  if (audioStarted) {
+    audioStarted = false;
+
+    if (audioCtx) {
+      await audioCtx.close();
+      audioCtx = null;
+    }
+
+    soundBtn.textContent = '♫ ВКЛЮЧИТЬ ЗВУК';
+    soundBtn.setAttribute('aria-pressed', 'false');
+    statusText.textContent = 'SILENCE';
+    return;
+  }
+
+  startSound();
+
+  if (audioCtx && audioCtx.state === 'suspended') {
+    await audioCtx.resume();
+  }
+});
+
+volumeControl.addEventListener('input', () => {
+  if (master && audioCtx) {
+    master.gain.setTargetAtTime(
+      Number(volumeControl.value) / 100 * 0.35,
+      audioCtx.currentTime,
+      0.04
+    );
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && audioCtx && audioStarted) {
+    audioCtx.suspend();
+  } else if (!document.hidden && audioCtx && audioStarted) {
+    audioCtx.resume();
+  }
+});
+</script>
+</body>
+</html>
+
